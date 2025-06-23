@@ -13,7 +13,7 @@ resultGenerator.GenerateResponses();
 while (true)
 {
     await Task.Delay(1000);
-    var tasks = clients.Select(cl => cl.Send(address, HttpMethod.Get, CancellationToken.None));    
+    var tasks = clients.Select(cl => cl.Send(address, HttpMethod.Get, CancellationToken.None));
 
     await Task.WhenAll(tasks);
 }

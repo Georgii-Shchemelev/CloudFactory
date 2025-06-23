@@ -1,7 +1,7 @@
-﻿using TrafficProcessor.Data;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
-using Microsoft.Extensions.Logging;
 using System.Net;
+using TrafficProcessor.Data;
 
 namespace TrafficProcessor.Tests;
 

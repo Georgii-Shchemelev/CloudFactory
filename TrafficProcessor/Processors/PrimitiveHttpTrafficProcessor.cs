@@ -4,7 +4,6 @@ using TrafficProcessor.Infrastructure;
 
 namespace TrafficProcessor.Processors;
 
-
 public class PrimitiveHttpTrafficProcessor : HttpTrafficProcessor
 {
     public PrimitiveHttpTrafficProcessor(IMessageManager<Response> messageManager, IMessageBroker messageBroker, ILogger<PrimitiveHttpTrafficProcessor> logger)

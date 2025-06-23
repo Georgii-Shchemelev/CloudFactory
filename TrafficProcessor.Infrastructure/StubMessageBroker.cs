@@ -11,7 +11,6 @@ public interface IMessageBroker
 
 public class StubMessageBroker : BackgroundService, IMessageBroker
 {
-
     private readonly IEnumerable<Func<IMessageHandler>> _handlers;
     private readonly MessageBrokerOptions _options;
 
@@ -22,7 +21,7 @@ public class StubMessageBroker : BackgroundService, IMessageBroker
         _options = options.Value; ;
         _handlers = handlers.ToList();
         Logger = logger;
-        CreateDirectory();        
+        CreateDirectory();
     }
 
     public async Task Send(string key, string request, CancellationToken token)
@@ -34,7 +33,7 @@ public class StubMessageBroker : BackgroundService, IMessageBroker
             Logger.LogWarning("File with the sam key {MessageKey} already exists", key);
             return;
         }
-        await File.WriteAllTextAsync(file, request, token);        
+        await File.WriteAllTextAsync(file, request, token);
     }
 
     protected override async Task ExecuteAsync(CancellationToken token)
@@ -79,15 +78,33 @@ public class StubMessageBroker : BackgroundService, IMessageBroker
 
     private void DeleteFiles(string responseFile)
     {
-        File.Delete(responseFile);
-        var requestFile = Path.ChangeExtension(responseFile, _options.RequestExtension);
-        if (File.Exists(requestFile))
-            File.Delete(requestFile);
+        try
+        {
+            File.Delete(responseFile);
+            var requestFile = Path.ChangeExtension(responseFile, _options.RequestExtension);
+            if (File.Exists(requestFile))
+                File.Delete(requestFile);
+
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Can't delete file {File}", responseFile);
+        }
     }
 
     private void CreateDirectory()
     {
-        if (!Directory.Exists(_options.Directory))
-            Directory.CreateDirectory(_options.Directory);
+        try
+        {
+            Logger.LogInformation("Creating directory {Directory} for message broker", _options.Directory);
+
+            if (!Directory.Exists(_options.Directory))
+                Directory.CreateDirectory(_options.Directory);
+
+        }
+        catch (Exception ex)
+        {
+            Logger.LogCritical(ex, "Can't create message broker directory {Directory}", _options.Directory)
+        }
     }
 }

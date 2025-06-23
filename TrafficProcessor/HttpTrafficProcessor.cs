@@ -61,16 +61,27 @@ public abstract class HttpTrafficProcessor : IHttpTrafficProcessor
 
     private Response ParseResponse(string content)
     {
-        using var sr = new StringReader(content);
-        return new Response()
+        try
         {
-            StatusCode = Enum.Parse<HttpStatusCode>(sr.ReadLine()),
-            Content = sr.ReadToEnd()
-        };
+            using var sr = new StringReader(content);
+            return new Response()
+            {
+                StatusCode = Enum.Parse<HttpStatusCode>(sr.ReadLine()),
+                Content = sr.ReadToEnd()
+            };
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error parsing response content {ResponseContent}", content);
+            return new Response()
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                Content = content
+            };
+        }
     }
 
     protected abstract string GetCorrelationId(Request request);
-
 
     protected string GetMessageKey(Request request)
     {

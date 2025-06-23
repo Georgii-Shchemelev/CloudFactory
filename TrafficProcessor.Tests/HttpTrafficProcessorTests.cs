@@ -1,5 +1,4 @@
-﻿using Castle.Core.Logging;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using System.Net;
 using TrafficProcessor.Data;
@@ -62,12 +61,12 @@ class HttpTrafficProcessorTests
         HttpTrafficProcessor.KeyToCorrelationId.Add(key, correlationId);
         var responseContent = "888";
         var fileContent = "200" + Environment.NewLine + responseContent;
-       
+
         await trafficProcessor.Handle(key, fileContent, CancellationToken.None);
 
 
         messageManagerMock.Verify(mock => mock.Write(It.Is<string>(s => s == correlationId), It.Is<Response>(r => r.StatusCode == HttpStatusCode.OK && r.Content == responseContent), CancellationToken.None), Times.Once);
-        
+
         Assert.False(HttpTrafficProcessor.KeyToCorrelationId.ContainsKey(key));
     }
 

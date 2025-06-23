@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TrafficProcessor.Data;
 
-namespace TrafficProcessor.Api.Controllers;
+namespace TrafficProcessor.App.Controllers;
 
 
 [ApiController]

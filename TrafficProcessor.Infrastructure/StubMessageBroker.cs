@@ -104,7 +104,7 @@ public class StubMessageBroker : BackgroundService, IMessageBroker
         }
         catch (Exception ex)
         {
-            Logger.LogCritical(ex, "Can't create message broker directory {Directory}", _options.Directory)
+            Logger.LogCritical(ex, "Can't create message broker directory {Directory}", _options.Directory);
         }
     }
 }
